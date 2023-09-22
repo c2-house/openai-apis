@@ -1,10 +1,10 @@
-from app.core.dependencies.messages import MessageQueryParams
+from app.schemas.messages import MessageRequest
 from app.core.config import settings
 
 
 class MessageBotPrompt:
     @classmethod
-    def make_prompt(cls, params: MessageQueryParams) -> str:
+    def make_prompt(cls, params: MessageRequest) -> str:
         base_prompts = settings.BASE_MESSAGE_PROMPT
         system_prompt = cls._get_system()
         user_prompt = cls._get_user(base_prompts, params)
@@ -16,10 +16,12 @@ class MessageBotPrompt:
         return {"role": "system", "content": "You are a message creator."}
 
     @classmethod
-    def _get_user(cls, base_prompts: list, params: MessageQueryParams) -> dict:
+    def _get_user(cls, base_prompts: list, params: MessageRequest) -> dict:
         user_prompt_dict = {
             "0": base_prompts[0],
-            "1": f"{base_prompts[1]} {params.who} {params.relation}",
+            "1": f"{base_prompts[1]} {params.relation}. {params.name} {settings.NAME_PROMPT}"
+            if params.name
+            else f"{base_prompts[1]} {params.relation}",
             "2": f"{base_prompts[2]} {params.reason}",
             "3": f"{base_prompts[3]} {params.manner}",
             "4": f"{base_prompts[4]} {params.max_length}",

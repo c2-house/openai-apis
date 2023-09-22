@@ -16,6 +16,7 @@ class AppSettings(BaseSettings):
     MODEL: str = config("MODEL")
     BASE_MESSAGE_PROMPT: list = config("BASE_MESSAGE_PROMPT", cast=Csv())
     BASE_QUIZ_PROMPT: list = config("BASE_QUIZ_PROMPT", cast=Csv())
+    NAME_PROMPT: str = config("NAME_PROMPT")
 
 
 settings = AppSettings()

@@ -1,6 +1,6 @@
 import openai
 from fastapi import APIRouter, Depends, HTTPException, status
-from app.core.dependencies.requests import check_secret_header
+from app.services.dependencies.requests import check_secret_header
 from app.core.prompts.quizzes import QuizPrompt
 from app.schemas.quizzes import QuizResponse
 from app.core.config import settings

@@ -1,6 +1,14 @@
 from pydantic import BaseModel, validator
 
 
+class MessageRequest(BaseModel):
+    name: str | None = None
+    relation: str
+    reason: str
+    manner: str
+    max_length: str
+
+
 class MessageResponse(BaseModel):
     results: list
 
