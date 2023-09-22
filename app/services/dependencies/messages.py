@@ -17,7 +17,7 @@ async def convert_manner(data: MessageRequest) -> MessageRequest:
     return data
 
 
-async def send_prompt_to_openai(
+async def get_message_from_openai(
     data: Annotated[MessageRequest, Depends(convert_manner)]
 ) -> dict:
     try:
@@ -39,4 +39,28 @@ async def send_prompt_to_openai(
     return {"results": results}
 
 
-HelloMessagePrompt = Annotated[dict, Depends(send_prompt_to_openai)]
+async def get_streaming_message_from_opeanai(
+    data: Annotated[MessageRequest, Depends(convert_manner)]
+) -> dict:
+    try:
+        response = await openai.ChatStream.acreate(
+            model=settings.MODEL,
+            messages=MessageBotPrompt.make_prompt(data),
+            temperature=1,
+            max_tokens=1024,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            stream=True,
+        )
+        content = response.choices[0]["message"]["content"]
+    except openai.InvalidRequestError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    return content
+
+
+HelloMessagePrompt = Annotated[dict, Depends(get_message_from_openai)]
+HelloMessageStreamingPrompt = Annotated[
+    str, Depends(get_streaming_message_from_opeanai)
+]
