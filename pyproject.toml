@@ -15,7 +15,6 @@ sqlalchemy = "^2.0.19"
 python-decouple = "^3.8"
 pydantic-settings = "^2.0.2"
 attrs = "^23.1.0"
-langchain = "^0.0.300"
 
 
 [build-system]
