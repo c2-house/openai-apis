@@ -1,10 +1,23 @@
 import openai
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
+from app.core.lifespan import lifespan
 from app.routes.routers import router as api_router
+
 
 openai.api_key = settings.OPEN_AI_KEY
 
-app = FastAPI(docs_url=settings.DOCS_URL, redoc_url=settings.REDOC_URL)
+app = FastAPI(
+    docs_url=settings.DOCS_URL, redoc_url=settings.REDOC_URL, lifespan=lifespan
+)
 
 app.include_router(api_router)
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["localhost:3000", "172.30.1.27:3000"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)

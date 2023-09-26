@@ -1,10 +1,11 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, Request, status
 from fastapi.responses import StreamingResponse
 from app.services.dependencies.messages import (
     HelloMessagePrompt,
 )
 from app.services.dependencies.requests import check_secret_header
 from app.schemas.messages import MessageResponse, MessageRequest
+from app.services.supabase.messages import update_count
 from app.services.dependencies.messages import get_streaming_message_from_openai
 
 
@@ -38,6 +39,7 @@ async def get_generated_messages(results: HelloMessagePrompt):
     summary="인사말 생성하기 (스트리밍)",
 )
 async def get_generated_messages_streaming(
+    request: Request,
     data: MessageRequest,
 ):
     """
@@ -48,7 +50,7 @@ async def get_generated_messages_streaming(
     - manner: str
     - max_length: str
     """
-
+    update_count(request)
     return StreamingResponse(
         get_streaming_message_from_openai(data), media_type="text/event-stream"
     )

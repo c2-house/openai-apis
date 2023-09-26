@@ -1,9 +1,10 @@
 import openai
 from typing import Annotated
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
+from app.schemas.messages import MessageRequest
+from app.services.supabase.messages import update_count
 from app.core.prompts.messages import MessageBotPrompt
 from app.core.config import settings
-from app.schemas.messages import MessageRequest
 
 
 async def convert_manner(data: MessageRequest) -> MessageRequest:
@@ -18,8 +19,9 @@ async def convert_manner(data: MessageRequest) -> MessageRequest:
 
 
 async def get_message_from_openai(
-    data: Annotated[MessageRequest, Depends(convert_manner)]
+    request: Request, data: Annotated[MessageRequest, Depends(convert_manner)]
 ) -> dict:
+    update_count(request)
     try:
         response = await openai.ChatCompletion.acreate(
             model=settings.MODEL,
