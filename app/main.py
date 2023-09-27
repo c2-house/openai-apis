@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.lifespan import lifespan
 from app.routes.routers import router as api_router
-
+from app.routes.health_check import router as health_check_router
 
 openai.api_key = settings.OPEN_AI_KEY
 
@@ -13,6 +13,7 @@ app = FastAPI(
 )
 
 app.include_router(api_router)
+app.include_router(health_check_router)
 
 
 app.add_middleware(
