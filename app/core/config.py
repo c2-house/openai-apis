@@ -13,6 +13,7 @@ class AppSettings(BaseSettings):
     SECRET: str = config("SECRET", default="dev")
     DOCS_URL: str = config("DOCS_URL", default="/api/docs")
     REDOC_URL: str = config("REDOC_URL", default="/api/redoc")
+    HEALTH_CHECK_PATH: str = "/health-check/"
 
     MODEL: str = config("MODEL")
     BASE_MESSAGE_PROMPT: list = config("BASE_MESSAGE_PROMPT", cast=Csv())
@@ -23,6 +24,32 @@ class AppSettings(BaseSettings):
     MAX_REQUEST_COUNT: int = 30
 
     TIMEZONE_LOCATION: str = "Asia/Seoul"
+
+    LOG_CONFIG: dict = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
+            "standard": {
+                "format": "%(levelname)s [%(name)s:%(lineno)s] %(message)s",
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            },
+        },
+        "handlers": {
+            "default": {
+                "level": "DEBUG",
+                "formatter": "standard",
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+            },
+        },
+        "loggers": {
+            "requests": {
+                "handlers": ["default"],
+                "level": "DEBUG",
+                "propagate": False,
+            },
+        },
+    }
 
     @property
     def TIMEZONE(self) -> tzinfo:

@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.lifespan import lifespan
+from app.core.middlewares.logging import LoggingMiddleware, LOGGER
 from app.routes.routers import router as api_router
 from app.routes.health_check import router as health_check_router
 
@@ -22,3 +23,5 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.add_middleware(LoggingMiddleware, logger=LOGGER)
