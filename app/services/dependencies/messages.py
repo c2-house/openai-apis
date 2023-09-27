@@ -12,7 +12,7 @@ async def convert_manner(data: MessageRequest) -> MessageRequest:
     Convert manner
     """
     if data.manner == "반말":
-        data.manner = "without honorifics"
+        data.manner = "without honorifics, use Korean informal language"
     elif data.manner == "존댓말":
         data.manner = "with honorifics"
     return data

@@ -19,16 +19,15 @@ class MessageBotPrompt:
     def _get_user(cls, base_prompts: list, params: MessageRequest) -> dict:
         user_prompt_dict = {
             "0": base_prompts[0],
-            "1": f"{base_prompts[1]} {params.relation}. {params.name} {settings.NAME_PROMPT}"
+            "1": f"{base_prompts[1]} {params.relation}. {params.name} {settings.NAME_PROMPT} Remember {params.name} is the recipient of the message.!"  # noqa: E501
             if params.name
-            else f"{base_prompts[1]} {params.relation}",
+            else f"{base_prompts[1]} {params.relation} Remember {params.relation} is the recipient of the message.!",
             "2": f"{base_prompts[2]} {params.reason}",
             "3": f"{base_prompts[3]} {params.manner}",
             "4": f"{base_prompts[4]} {params.max_length}",
             "5": f"{base_prompts[5]}",
             "6": f"{base_prompts[6]}",
         }
-
         results = ""
         for value in user_prompt_dict.values():
             results += f"{value} "
