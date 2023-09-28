@@ -9,11 +9,13 @@ config = AutoConfig(search_path=BASE_DIR)
 
 class AppSettings(BaseSettings):
     DEBUG: bool = config("DEBUG", default=True, cast=bool)
+    OPENAPI_URL: str | None = "/openapi.json" if DEBUG else None
     OPEN_AI_KEY: str = config("OPEN_AI_KEY")
     SECRET: str = config("SECRET", default="dev")
     DOCS_URL: str = config("DOCS_URL", default="/api/docs")
     REDOC_URL: str = config("REDOC_URL", default="/api/redoc")
     HEALTH_CHECK_PATH: str = "/health-check/"
+    ALLOWED_HOSTS: list = config("ALLOWED_HOSTS", cast=Csv())
 
     MODEL: str = config("MODEL")
     BASE_MESSAGE_PROMPT: list = config("BASE_MESSAGE_PROMPT", cast=Csv())
