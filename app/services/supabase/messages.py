@@ -30,7 +30,7 @@ def check_usage_restriction(request: Request, ip: str, supabase: Client):
         if time.date() == today:
             count = response.data[0].get("count")
             if count >= settings.MAX_REQUEST_COUNT:
-                return HTTPException(
+                raise HTTPException(
                     status_code=status.HTTP_429_TOO_MANY_REQUESTS,
                     detail="오늘 사용량을 모두 사용하셨습니다. 내일 다시 이용해주세요.",
                 )
