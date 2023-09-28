@@ -16,6 +16,7 @@ class AppSettings(BaseSettings):
     REDOC_URL: str = config("REDOC_URL", default="/api/redoc")
     HEALTH_CHECK_PATH: str = "/health-check/"
     ALLOWED_HOSTS: list = config("ALLOWED_HOSTS", cast=Csv())
+    CORS_ORIGIN: list = ["https://messagebot.chaechae.life"]
 
     MODEL: str = config("MODEL")
     BASE_MESSAGE_PROMPT: list = config("BASE_MESSAGE_PROMPT", cast=Csv())

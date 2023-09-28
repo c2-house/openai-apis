@@ -21,12 +21,20 @@ app.include_router(api_router)
 app.include_router(health_check_router)
 
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["localhost:3000", "172.30.1.27:3000"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.ALLOWED_HOSTS)
+if settings.DEBUG:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["localhost:3000", "172.30.1.27:3000"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.CORS_ORIGIN,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.ALLOWED_HOSTS)
 app.add_middleware(LoggingMiddleware, logger=LOGGER)
